@@ -128,3 +128,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# no envs please
+*.env
+*.env*
+
+# no downloads
+src/trufflehog/downloads

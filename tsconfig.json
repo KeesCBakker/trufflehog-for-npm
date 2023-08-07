@@ -1,0 +1,16 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "commonjs",
+    "outDir": "dist",
+    "declaration": true,
+    "esModuleInterop": true,
+    "removeComments": false
+  },
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["node_modules", "dist"],
+  "typeAcquisition": {
+    "enable": true
+  }
+}
