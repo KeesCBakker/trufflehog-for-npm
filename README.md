@@ -69,3 +69,4 @@ Commands:
 - [x] Write install instructions
 - [ ] Write production install instructions
 - [ ] Add install to package command just like Husky
+- [ ] Add dev container for cross env development
