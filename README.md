@@ -57,7 +57,7 @@ Commands:
   trufflehog [options]  Starts trufflehog with the specified parameters. If trufflehog is not in your path, it will be downloaded.
   scan                  Packs the current NPM package and scans the result with trufflehog.
   refresh               Remove the trufflehog download (if there is any) and downloads the latest version.
-  pre-commit|precommit  Scans the staged files with trufflehog. Can be used in a pre-commit hook.
+  pre-commit            Scans the staged files with trufflehog. Can be used in a pre-commit hook.
   help [command]        display help for command
 ```
 
