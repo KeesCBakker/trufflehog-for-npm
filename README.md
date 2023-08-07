@@ -7,7 +7,7 @@ Let's use <a href="https://github.com/trufflesecurity/trufflehog">trufflehog</a>
 Let's create something that:
 
 - [ ] Can run on a `prePublish` hook in NPM
-- [ ] Downloads the right version of trufflehog
+- [x] Downloads the right version of trufflehog (for your platform)
 - [ ] Scans the package that is about to be published
 - [ ] And prevents publishing that package if a key is in it
 - [ ] That runs on multiple platforms (Windows, Apple and Linux)
@@ -64,7 +64,7 @@ Commands:
 ## Todo
 
 - [ ] Download new release if current release is older than x days
-- [ ] Create CLI with options and help
+- [x] Create CLI with options and help
 - [ ] Write some test cases
 - [x] Write install instructions
 - [ ] Write production install instructions
