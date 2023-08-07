@@ -12,6 +12,8 @@ const program = new Command()
 
 program
   .name(details.name)
+  .alias("hog")
+  .alias("npm-hog")
   .version(details.version)
   .description(details.description)
 

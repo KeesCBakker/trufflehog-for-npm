@@ -4,7 +4,9 @@
   "description": "Let's use trufflehog to scan you NPM package before it is published. No more 🔑🔑🔑 to NPM!",
   "main": "./dist/src/index.js",
   "bin": {
-    "hog": "./dist/src/index.js"
+    "hog": "./dist/src/index.js",
+    "npm-hog": "./dist/src/index.js",
+    "trufflehog-for-npm": "./dist/src/index.js"
   },
   "private": true,
   "scripts": {
