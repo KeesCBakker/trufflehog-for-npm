@@ -5,11 +5,16 @@ import { spawn } from "child_process"
 
 export function executeNpmPack() {
   const npm = process.platform === "win32" ? "npm.cmd" : "npm"
+  const packagePath = path.join(cwd(), "package.json")
+
+  if (!fs.existsSync(packagePath)) {
+    throw new Error(
+      "No package.json found in directory. Can only run scan for NPM packages."
+    )
+  }
 
   return new Promise<string>((resolve, reject) => {
-    let packageJsonFileContents = fs
-      .readFileSync(path.join(cwd(), "package.json"))
-      .toString()
+    let packageJsonFileContents = fs.readFileSync(packagePath).toString()
     let packageJson = JSON.parse(packageJsonFileContents)
     let packageName = `${packageJson.name}-${packageJson.version}.tgz`
 

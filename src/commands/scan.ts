@@ -16,7 +16,14 @@ export function addScanCommand(program: Command) {
     )
     .action(async () => {
       title("Packing NPM")
-      const tarball = await executeNpmPack()
+      let tarball: string
+
+      try {
+        tarball = await executeNpmPack()
+      } catch (ex) {
+        console.log(ex.message)
+        process.exit(404)
+      }
 
       title("Unpack tarball")
       const details = await unpack(tarball)
