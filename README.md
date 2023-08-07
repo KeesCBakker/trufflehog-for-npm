@@ -1,4 +1,4 @@
-# trufflehog-for-npm
+# Trufflehog for NPM 🔑🐷
 Let's use <a href="https://github.com/trufflesecurity/trufflehog">trufflehog</a> to scan you NPM package before it is published. No more 🔑🔑🔑 to NPM!
 
 ## Goals
