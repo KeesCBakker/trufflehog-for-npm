@@ -1,15 +1,8 @@
-import { ensureTruffleHog } from "./downloader"
+import { ensureTrufflehogBin } from "./downloader"
 import { spawn } from "child_process"
 
-export async function executeTruffleHog(directory: string, tarball: string) {
-  // Escape backslashes in the directory string
-  const escapedDirectory = directory.replace(/\\/g, "\\\\")
-
-  await start(["filesystem", escapedDirectory, "--fail"])
-}
-
-export async function start(args: string[]) {
-  const truffleHogPath = await ensureTruffleHog()
+export async function executeTrufflehog(args: string[]) {
+  const truffleHogPath = await ensureTrufflehogBin()
 
   return new Promise<void>((resolve, reject) => {
     const trufflehog = spawn(truffleHogPath, args, {
@@ -27,6 +20,22 @@ export async function start(args: string[]) {
   })
 }
 
-export async function echoTruggleHogVersion() {
-  await start(["--version"])
+export async function echoTrufflehogVersion() {
+  await executeTrufflehog(["--version"])
+}
+
+export async function scanDirectoryWithTrufflehog(directory: string) {
+  // Escape backslashes in the directory string
+  const escapedDirectory = directory.replace(/\\/g, "\\\\")
+  await executeTrufflehog(["filesystem", escapedDirectory, "--fail"])
+}
+
+export async function scanPreCommitWithTrufflehog() {
+  await executeTrufflehog([
+    "git",
+    "file://.",
+    "--since-commit",
+    "HEAD",
+    "--fail"
+  ])
 }

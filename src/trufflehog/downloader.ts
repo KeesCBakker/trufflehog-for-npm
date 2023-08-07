@@ -8,7 +8,7 @@ import fetch from "node-fetch"
 import { Octokit } from "@octokit/rest"
 import { rimrafSync } from "rimraf"
 
-function getTruffleHogExecPath() {
+function getTrufflehogBinPath() {
   let bin = path.join(__dirname, "downloads", "trufflehog")
   if (getPlatformString().includes("window")) {
     bin += ".exe"
@@ -16,7 +16,7 @@ function getTruffleHogExecPath() {
   return bin
 }
 
-export async function ensureTruffleHog() {
+export async function ensureTrufflehogBin() {
   try {
     if (await commandExists("trufflehog")) {
       return "trufflehog"
@@ -25,7 +25,7 @@ export async function ensureTruffleHog() {
     // no trufflehog in path, continue
   }
 
-  let truffleHogExecPath = getTruffleHogExecPath()
+  let truffleHogExecPath = getTrufflehogBinPath()
   if (!fs.existsSync(truffleHogExecPath)) {
     await downloadTruffleHog()
   }
@@ -33,10 +33,10 @@ export async function ensureTruffleHog() {
   return truffleHogExecPath
 }
 
-export async function refreshHogDownload() {
+export async function refreshTrufflehogDownload() {
   let bin = path.join(__dirname, "downloads")
   rimrafSync(bin, { maxRetries: 5, retryDelay: 1 })
-  await ensureTruffleHog()
+  await ensureTrufflehogBin()
 }
 
 async function getTruffleHogReleaseURL(): Promise<string> {
@@ -86,7 +86,7 @@ function getPlatformString() {
 }
 
 async function downloadTruffleHog() {
-  const destination = getTruffleHogExecPath()
+  const destination = getTrufflehogBinPath()
 
   fs.mkdirSync(path.dirname(destination), { recursive: true })
 

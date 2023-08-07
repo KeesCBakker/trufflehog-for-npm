@@ -1,5 +1,8 @@
 import { Command } from "commander"
-import { start } from "../trufflehog/runner"
+import {
+  executeTrufflehog,
+  scanPreCommitWithTrufflehog
+} from "../trufflehog/runner"
 import { signalNoSecretsFound, signalSecretsFoundBanner } from "../console"
 
 export function addPreCommitCommand(program: Command) {
@@ -10,7 +13,7 @@ export function addPreCommitCommand(program: Command) {
     )
     .action(async () => {
       try {
-        await start(["git", "file://.", "--since-commit", "HEAD", "--fail"])
+        await scanPreCommitWithTrufflehog()
         signalNoSecretsFound()
       } catch {
         signalSecretsFoundBanner()

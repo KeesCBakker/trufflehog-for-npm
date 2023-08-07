@@ -1,5 +1,8 @@
 import { Command } from "commander"
-import { echoTruggleHogVersion, executeTruffleHog } from "../trufflehog/runner"
+import {
+  echoTrufflehogVersion,
+  scanDirectoryWithTrufflehog
+} from "../trufflehog/runner"
 import { executeNpmPack } from "../npm"
 import {
   signalNoSecretsFound,
@@ -26,22 +29,22 @@ export function addScanCommand(program: Command) {
       }
 
       title("Unpack tarball")
-      const details = await unpack(tarball)
+      const unpackResult = await unpack(tarball)
 
-      console.log("Tarbal:  ", tarball)
-      console.log("Unpacked:", details.directory)
+      console.log("Tarbal:  ", unpackResult.file)
+      console.log("Unpacked:", unpackResult.directory)
 
       title("Execute trufflehog")
-      await echoTruggleHogVersion()
+      await echoTrufflehogVersion()
 
       try {
-        await executeTruffleHog(details.directory, details.file)
+        await scanDirectoryWithTrufflehog(unpackResult.directory)
         signalNoSecretsFound()
       } catch {
         signalSecretsFoundBanner()
         process.exit(138)
       }
 
-      await details.cleanUp()
+      await unpackResult.cleanUp()
     })
 }
