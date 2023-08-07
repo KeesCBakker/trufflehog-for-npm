@@ -12,7 +12,7 @@ Let's create something that:
 - [ ] That runs on multiple platforms (Windows, Apple and Linux)
 
 And that:
-- [ ] Uses a Husky pre-commit hook
+- [ ] Uses a <a href="https://www.npmjs.com/package/husky">Husky</a> pre-commit hook
 - [ ] to scan the current commit
 - [ ] And prevents publishing that package if a key is in it
 
