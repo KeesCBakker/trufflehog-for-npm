@@ -13,7 +13,8 @@
     "start": "node ./dist/src/index.js",
     "dev": "ts-node src/index.ts",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --require ts-node/register --parallel --jobs 4 'test/**/*.spec.ts'",
+    "test-only": "mocha --require ts-node/register 'test/**/*.spec.ts'",
     "format": "prettier --config .prettierrc {test,src}/**/*.ts --write",
     "gi": "npm run build && npm install -g . && hog --version"
   },
@@ -43,11 +44,15 @@
     "tmp-promise": "^3.0.3"
   },
   "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.4.8",
+    "chai": "^4.3.7",
+    "fs-extra": "^11.1.1",
+    "mocha": "^10.2.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.1.6"
   },
   "files": [
-    "dist/src/*.{js,d.ts}",
-    "kaas.tt.env"
+    "dist/src/*.{js,d.ts}"
   ]
 }
