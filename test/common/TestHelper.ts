@@ -5,8 +5,6 @@ import { Command, CommanderError } from "commander"
 import { dir } from "tmp-promise"
 import { exec } from "child_process"
 import { cwd } from "process"
-import dirTree from "directory-tree"
-import fsFileTree from "fs-file-tree"
 import { displayTree } from "./DirectoryTree"
 
 class TestHelper {
@@ -18,6 +16,7 @@ class TestHelper {
   out: string[] = []
   err: string[] = []
   exitError: CommanderError | null = null
+  lastError: Error | null = null
   lastArgs: string[]
 
   constructor() {
@@ -105,16 +104,20 @@ class TestHelper {
       this.lastArgs = args
       await this.program.parseAsync(args)
       await this.wait(1)
-    } catch {
+    } catch (ex) {
+      this.lastError = ex
       return this.exitError?.exitCode || -1
     }
 
     return 0
   }
 
-  dump() {
+  dump(dir: string = "."): void {
     console.log("--EXIT:")
     console.log(this.exitError)
+
+    console.log("--EXECUTE-ERROR:")
+    console.log(this.lastError)
 
     console.log("--ERROR:")
     console.log(this.err.join())
@@ -126,20 +129,31 @@ class TestHelper {
     console.log()
 
     console.log("--FILES:")
-    displayTree()
+    displayTree(dir)
     console.log()
   }
 
   fakeASecret(): string {
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    let randomPart = ""
-
-    for (let i = 0; i < 12; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length)
-      randomPart += characters[randomIndex]
+    const randomNumbers = (): string => {
+      let result = ""
+      for (let i = 0; i < 11; i++) {
+        result += Math.floor(Math.random() * 10).toString()
+      }
+      return result
     }
 
-    return "AK" + "IA" + randomPart + "FAKE"
+    const randomChars = (): string => {
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+      let result = ""
+      for (let i = 0; i < 24; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length)
+        result += characters[randomIndex]
+      }
+      return result
+    }
+
+    return `xoxb-${randomNumbers()}-${randomNumbers()}-${randomChars()}`
   }
 
   /**

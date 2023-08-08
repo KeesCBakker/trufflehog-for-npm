@@ -1,5 +1,5 @@
 import { Command } from "commander"
-import { executeTrufflehog } from "../trufflehog/runner"
+import { executeTrufflehog } from "../shell/trufflehog/runner"
 
 export function addTrufflehogCommand(program: Command) {
   program
@@ -11,7 +11,8 @@ export function addTrufflehogCommand(program: Command) {
     )
     .action(async (_, options) => {
       await executeTrufflehog(
-        options.args.map(x => (x == "version" ? "--version" : x))
+        options.args.map(x => (x == "version" ? "--version" : x)),
+        false
       )
     })
 }

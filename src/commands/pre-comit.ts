@@ -2,7 +2,7 @@ import { Command } from "commander"
 import {
   executeTrufflehog,
   scanPreCommitWithTrufflehog
-} from "../trufflehog/runner"
+} from "../shell/trufflehog/runner"
 import { signalNoSecretsFound, signalSecretsFoundBanner } from "../console"
 
 export function addPreCommitCommand(program: Command) {

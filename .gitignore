@@ -134,4 +134,5 @@ dist
 *.env*
 
 # no downloads
-src/trufflehog/downloads
+downloads
+temp
