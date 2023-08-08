@@ -45,8 +45,6 @@ hog trufflehog version
 ## Usage
 
 ```txt
-Usage: trufflehog-for-npm [options] [command]
-
 Let's use trufflehog to scan you NPM package before it is published. No more 🔑🔑🔑 to NPM!
 
 Options:
@@ -55,9 +53,10 @@ Options:
 
 Commands:
   trufflehog [options]  Starts trufflehog with the specified parameters. If trufflehog is not in your path, it will be downloaded.
-  scan                  Packs the current NPM package and scans the result with trufflehog.
+  scan [options]        Packs the current NPM package and scans the result with trufflehog.
   refresh               Remove the trufflehog download (if there is any) and downloads the latest version.
   pre-commit            Scans the staged files with trufflehog. Can be used in a pre-commit hook.
+  install               Installs trufflehog as pre-commit (GIT) and pre-publish (NPM) hooks.
   help [command]        display help for command
 ```
 
