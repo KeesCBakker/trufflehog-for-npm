@@ -3,7 +3,6 @@ import fs from "fs-extra"
 import path, { dirname } from "path"
 import { Command, CommanderError } from "commander"
 import { dir } from "tmp-promise"
-import { exec } from "child_process"
 import { cwd } from "process"
 import { displayTree } from "./DirectoryTree"
 import { captureOutput } from "./capture-util"
@@ -22,9 +21,11 @@ class TestHelper {
   lastError: Error | null = null
   lastArgs: string[]
   lastExitCode: number | null = null
+  originalExit: { (code?: number): never; (code?: number): never }
 
   constructor() {
     this.cwd = cwd()
+    this.originalExit = process.exit
   }
 
   /**
@@ -185,6 +186,10 @@ class TestHelper {
   }
 
   private async execute<T>(item: () => Promise<T>) {
+    process.exit = function (code) {
+      throw new Error(`Process exited with code: ${code}`)
+    }
+
     var capture = captureOutput()
     capture.start()
 
@@ -197,6 +202,7 @@ class TestHelper {
       const { stderr, stdout } = capture.stop()
       this.err = this.err.concat(stderr)
       this.out = this.out.concat(stdout)
+      process.exit = this.originalExit
     }
 
     return 0

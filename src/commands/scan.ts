@@ -79,7 +79,7 @@ export function addScanCommand(program: Command) {
         signalNoSecretsFound(options.silent)
       } catch (ex) {
         signalSecretsFoundBanner(options.silent)
-        throw ex
+        process.exit(138)
       }
 
       await unpackResult.cleanUp()
