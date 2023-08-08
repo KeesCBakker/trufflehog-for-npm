@@ -1,6 +1,6 @@
 import { Command } from "commander"
-import { refreshTrufflehogDownload } from "../trufflehog/downloader"
-import { echoTrufflehogVersion } from "../trufflehog/runner"
+import { refreshTrufflehogDownload } from "../shell/trufflehog/downloader"
+import { echoTrufflehogVersion } from "../shell/trufflehog/runner"
 
 export function addRefreshCommand(program: Command) {
   program
@@ -9,7 +9,7 @@ export function addRefreshCommand(program: Command) {
       "Remove the trufflehog download (if there is any) and downloads the latest version."
     )
     .action(async () => {
-      await refreshTrufflehogDownload()
+      await refreshTrufflehogDownload(false)
       await echoTrufflehogVersion()
     })
 }

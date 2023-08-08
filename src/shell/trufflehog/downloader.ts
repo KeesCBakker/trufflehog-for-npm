@@ -7,6 +7,7 @@ import commandExists from "command-exists"
 import fetch from "node-fetch"
 import { Octokit } from "@octokit/rest"
 import { rimrafSync } from "rimraf"
+import { out } from "../../console"
 
 function getTrufflehogBinPath() {
   let bin = path.join(__dirname, "downloads", "trufflehog")
@@ -16,7 +17,7 @@ function getTrufflehogBinPath() {
   return bin
 }
 
-export async function ensureTrufflehogBin() {
+export async function ensureTrufflehogBin(silent: boolean) {
   try {
     if (await commandExists("trufflehog")) {
       return "trufflehog"
@@ -27,16 +28,16 @@ export async function ensureTrufflehogBin() {
 
   let truffleHogExecPath = getTrufflehogBinPath()
   if (!fs.existsSync(truffleHogExecPath)) {
-    await downloadTruffleHog()
+    await downloadTruffleHog(silent)
   }
 
   return truffleHogExecPath
 }
 
-export async function refreshTrufflehogDownload() {
+export async function refreshTrufflehogDownload(silent: boolean) {
   let bin = path.join(__dirname, "downloads")
   rimrafSync(bin, { maxRetries: 5, retryDelay: 1 })
-  await ensureTrufflehogBin()
+  await ensureTrufflehogBin(silent)
 }
 
 async function getTruffleHogReleaseURL(): Promise<string> {
@@ -85,14 +86,17 @@ function getPlatformString() {
   return `${mappedPlatform}_${mappedArch}`
 }
 
-async function downloadTruffleHog() {
+async function downloadTruffleHog(silent: boolean) {
   const destination = getTrufflehogBinPath()
 
   fs.mkdirSync(path.dirname(destination), { recursive: true })
 
   const url = await getTruffleHogReleaseURL()
-  console.log("Downloading trufflehog from:", chalk.yellow(url))
-  console.log("")
+
+  if (!silent) {
+    out("Downloading trufflehog from:", chalk.yellow(url))
+    out("")
+  }
 
   const response = await fetch(url)
 

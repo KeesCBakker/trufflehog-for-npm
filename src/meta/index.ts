@@ -27,3 +27,20 @@ export function getPackageDetails() {
     description: packageJson.description as string
   }
 }
+
+export function getPackagRoot() {
+  return findProjectRoot()
+}
+
+function findProjectRoot(currentDir: string = __dirname): string {
+  if (fs.existsSync(path.join(currentDir, "package.json"))) {
+    return currentDir
+  }
+
+  const parentDir = path.dirname(currentDir)
+  if (parentDir === currentDir) {
+    throw new Error("Cannot find project root. No package.json found.")
+  }
+
+  return findProjectRoot(parentDir)
+}
