@@ -10,6 +10,8 @@ export async function executeShell(
 
   const options = { shell: true }
 
+  //console.log("shell debug", [program].concat(args).join(" "))
+
   const childProcess = spawn(program, args, options)
 
   childProcess.stdout.on("data", data => {

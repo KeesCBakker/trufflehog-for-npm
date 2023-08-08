@@ -1,8 +1,8 @@
-import { basename } from "path"
 import TestHelper from "./common/TestHelper"
 import { expect } from "chai"
+import { inferTestName } from "./common/naming"
 
-describe(basename(__filename), function () {
+describe(inferTestName(), function () {
   const helper = new TestHelper()
 
   beforeEach(() => helper.setup())

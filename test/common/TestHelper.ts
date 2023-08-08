@@ -132,9 +132,11 @@ class TestHelper {
     console.log("--ARGS:", this.lastArgs)
     console.log()
 
-    console.log("--FILES:")
-    displayTree(dir)
-    console.log()
+    if (dir != null) {
+      console.log("--FILES:")
+      displayTree(dir)
+      console.log()
+    }
   }
 
   fakeASecret(): string {
@@ -175,6 +177,22 @@ class TestHelper {
 
     const content = lines.join("\n") + "\n" // Convert lines to a single string and append newline at the end.
     await fs.appendFile(filePath, content) // Append content to the file.
+  }
+
+  async getFileContents(relativeFilePath) {
+    const filePath = path.join(this.getTempDirectory(), relativeFilePath)
+    let file = await fs.readFile(filePath)
+    return file
+  }
+
+  async getJson(relativeFilePath: string) {
+    let contents = await this.getFileContents(relativeFilePath)
+    return JSON.parse(contents.toString())
+  }
+
+  async cat(relativeFilePath: string) {
+    let contents = await this.getFileContents(relativeFilePath)
+    console.log(contents.toString())
   }
 
   async wait(ms: number) {
