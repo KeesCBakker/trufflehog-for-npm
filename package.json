@@ -13,7 +13,7 @@
     "start": "node ./dist/src/index.js",
     "dev": "ts-node src/index.ts",
     "build": "tsc",
-    "test": "mocha --require ts-node/register --parallel --jobs 4 'test/**/*.spec.ts' -t 30000",
+    "test": "mocha --require ts-node/register --parallel --jobs 8 'test/**/*.spec.ts' -t 30000",
     "test-only": "mocha --require ts-node/register 'test/**/*.spec.ts' -t 30000",
     "format": "prettier --config .prettierrc {test,src}/**/*.ts --write",
     "gi": "npm run build && npm install -g . && hog --version"

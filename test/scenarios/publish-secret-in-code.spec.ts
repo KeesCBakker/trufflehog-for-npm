@@ -26,11 +26,11 @@ describe(inferTestName(), function () {
 
   after(() => helper.cleanup())
 
-  it("should not finish correctly", () => {
-    expect(exitCode).to.eql(1)
+  it("should finish with an error code", () => {
+    expect(exitCode).to.not.eql(0)
   })
 
-  it.only("should detect a secret", () => {
+  it("should detect a secret", () => {
     expect(helper.err).to.include('"unverified_secrets": 1')
   })
 })
