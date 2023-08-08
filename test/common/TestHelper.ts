@@ -7,6 +7,8 @@ import { exec } from "child_process"
 import { cwd } from "process"
 import { displayTree } from "./DirectoryTree"
 import { captureOutput } from "./capture-util"
+import { executeShell } from "../../src/shell"
+import { executeNpm } from "../../src/shell/npm"
 
 class TestHelper {
   private static TEMPLATE_DIR = path.join(__dirname, "..", "_template")
@@ -19,6 +21,7 @@ class TestHelper {
   exitError: CommanderError | null = null
   lastError: Error | null = null
   lastArgs: string[]
+  lastExitCode: number | null = null
 
   constructor() {
     this.cwd = cwd()
@@ -73,23 +76,17 @@ class TestHelper {
     this.exitError = null
   }
 
-  /**
-   * Execute a shell command and return its results.
-   * @param command The command to execute.
-   */
-  async executeCommand(
-    command: string
-  ): Promise<{ error: Error | null; stdout: string; stderr: string }> {
-    return new Promise(resolve => {
-      exec(command, (error, stdout, stderr) => {
-        resolve({ error, stdout, stderr })
-      })
-    })
+  async npm(...args: string[]) {
+    this.lastArgs = ["npm"].concat(args)
+    return this.execute(() => executeNpm(args))
+  }
+
+  async shell(program: string, ...args: string[]) {
+    this.lastArgs = [program].concat(args)
+    return this.execute(() => executeShell(program, args))
   }
 
   async run(...args: string[]) {
-    const capture = captureOutput()
-
     if (args[0] != "node") {
       args = ["node"].concat(args)
     }
@@ -99,21 +96,7 @@ class TestHelper {
     }
 
     this.lastArgs = args
-    capture.start()
-
-    try {
-      await this.program.parseAsync(args)
-      await this.wait(1)
-    } catch (ex) {
-      this.lastError = ex
-      return this.exitError?.exitCode || -1
-    } finally {
-      const { stderr, stdout } = capture.stop()
-      this.err = this.err.concat(stderr)
-      this.out = this.out.concat(stdout)
-    }
-
-    return 0
+    return this.execute(() => this.program.parseAsync(args))
   }
 
   dump(dir: string = "."): void {
@@ -199,6 +182,24 @@ class TestHelper {
     return new Promise<void>(done => {
       setTimeout(() => done(), ms)
     })
+  }
+
+  private async execute<T>(item: () => Promise<T>) {
+    var capture = captureOutput()
+    capture.start()
+
+    try {
+      await item()
+    } catch (ex) {
+      this.lastError = ex
+      return this.exitError?.exitCode || 1
+    } finally {
+      const { stderr, stdout } = capture.stop()
+      this.err = this.err.concat(stderr)
+      this.out = this.out.concat(stdout)
+    }
+
+    return 0
   }
 }
 

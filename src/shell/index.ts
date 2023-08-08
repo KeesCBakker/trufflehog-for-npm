@@ -2,38 +2,40 @@ import { spawn } from "child_process"
 
 export async function executeShell(
   program: string,
-  args: string[],
-  silent: boolean = true
-): Promise<{ stdout: string; stderr: string }> {
-  let stdout = ""
-  let stderr = ""
+  args: string[]
+): Promise<number> {
+  const options = {
+    shell: true,
+    stdio: "inherit"
+  }
 
-  const options = { shell: true }
+  // when we're testing, don't share the stdio
+  const isTest = process.argv.some(arg => arg.includes("mocha"))
+  if (isTest) {
+    delete options.stdio
+  }
 
-  //console.log("shell debug", [program].concat(args).join(" "))
+  const childProcess = spawn(program, args)
 
-  const childProcess = spawn(program, args, options)
-
-  childProcess.stdout.on("data", data => {
-    stdout += data
-    if (!silent) {
+  // when we're testing, pip the data by hand
+  if (isTest) {
+    childProcess.stdout.on("data", data => {
       process.stdout.write(data)
-    }
-  })
+      process.stdout.write("\n")
+    })
 
-  childProcess.stderr.on("data", data => {
-    stderr += data
-    if (!silent) {
+    childProcess.stderr.on("data", data => {
       process.stderr.write(data)
-    }
-  })
+      process.stderr.write("\n")
+    })
+  }
 
-  return new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     childProcess.on("close", code => {
       if (code !== 0) {
         reject(new Error(`${program} failed with error code: ${code}`))
       } else {
-        resolve({ stdout, stderr })
+        resolve(code)
       }
     })
   })

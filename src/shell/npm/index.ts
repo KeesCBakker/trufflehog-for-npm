@@ -13,8 +13,8 @@ function ensurePackageScope() {
   }
 }
 
-export async function executeNpmPack(silent: boolean) {
-  await executeNpm(["pack"], silent)
+export async function executeNpmPack() {
+  await executeNpm(["pack"])
 
   let packagePath = resolvePackageJson()
   let packageJsonFileContents = fs.readFileSync(packagePath).toString()
@@ -28,10 +28,10 @@ export async function executeNpmInstallMe() {
   await executeNpm(["install", getPackagRoot(), "--save-dev"])
 }
 
-export async function executeNpm(args: string[], silent: boolean = false) {
+export async function executeNpm(args: string[]) {
   ensurePackageScope()
   let npm = resolveNpmBin()
-  await executeShell(npm, args, silent)
+  await executeShell(npm, args)
 }
 
 function resolvePackageJson() {

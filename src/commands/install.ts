@@ -18,7 +18,7 @@ export function addInstallCommand(program: Command) {
       await executeNpm([
         "pkg",
         "set",
-        '"scripts.npm-scan=trufflehog-for-npm scan"'
+        'scripts.npm-scan="trufflehog-for-npm scan"'
       ])
       await executeNpm([
         "pkg",

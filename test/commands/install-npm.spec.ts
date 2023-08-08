@@ -1,6 +1,6 @@
-import TestHelper from "./common/TestHelper"
+import TestHelper from "../common/TestHelper"
 import { expect } from "chai"
-import { inferTestName } from "./common/naming"
+import { inferTestName } from "../common/naming"
 
 describe(inferTestName(), function () {
   const helper = new TestHelper()

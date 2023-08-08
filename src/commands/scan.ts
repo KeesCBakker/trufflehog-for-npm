@@ -38,7 +38,7 @@ export function addScanCommand(program: Command) {
       let tarball: string
 
       try {
-        tarball = await executeNpmPack(options.silent)
+        tarball = await executeNpmPack()
       } catch (ex) {
         out(ex.message)
         process.exit(404)

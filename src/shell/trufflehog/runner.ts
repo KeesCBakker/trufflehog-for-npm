@@ -3,7 +3,7 @@ import { ensureTrufflehogBin } from "./downloader"
 
 export async function executeTrufflehog(args: string[], silent: boolean) {
   const truffleHogPath = await ensureTrufflehogBin(silent)
-  await executeShell(truffleHogPath, args, silent)
+  await executeShell(truffleHogPath, args)
 }
 
 export async function echoTrufflehogVersion(silent: boolean = false) {
