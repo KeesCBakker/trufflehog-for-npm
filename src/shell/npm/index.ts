@@ -25,7 +25,12 @@ export async function executeNpmPack() {
 }
 
 export async function executeNpmInstallMe() {
-  await executeNpm(["install", getPackagRoot(), "--save-dev"])
+  await executeNpm([
+    "install",
+    getPackagRoot(),
+    "--save-dev",
+    "--prefer-offline"
+  ])
 }
 
 export async function executeNpm(args: string[]) {

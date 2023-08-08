@@ -29,13 +29,13 @@ describe(inferTestName(), function () {
     expect(packageJson).not.to.be.empty
     expect(packageJson.scripts).not.to.be.empty
     expect(packageJson.scripts).to.contain.keys("npm-scan")
-    expect(packageJson.scripts["npm-scan"]).to.eql('"trufflehog-for-npm scan"')
+    expect(packageJson.scripts["npm-scan"]).to.eql("trufflehog-for-npm scan")
   })
 
   it("should have the prepublishOnly script", async () => {
     expect(packageJson).not.to.be.empty
     expect(packageJson.scripts).not.to.be.empty
     expect(packageJson.scripts).to.contain.keys("prepublishOnly")
-    expect(packageJson.scripts["prepublishOnly"]).to.eql('"npm run npm-scan"')
+    expect(packageJson.scripts["prepublishOnly"]).to.eql("npm run npm-scan")
   })
 })

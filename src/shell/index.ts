@@ -4,18 +4,19 @@ export async function executeShell(
   program: string,
   args: string[]
 ): Promise<number> {
-  const options = {
+  const options: Record<string, any> = {
     shell: true,
     stdio: "inherit"
   }
 
   // when we're testing, don't share the stdio
   const isTest = process.argv.some(arg => arg.includes("mocha"))
+  // console.log("Are we testing?", isTest)
   if (isTest) {
     delete options.stdio
   }
 
-  const childProcess = spawn(program, args)
+  const childProcess = spawn(program, args, options)
 
   // when we're testing, pip the data by hand
   if (isTest) {
