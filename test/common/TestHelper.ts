@@ -6,6 +6,7 @@ import { dir } from "tmp-promise"
 import { exec } from "child_process"
 import { cwd } from "process"
 import { displayTree } from "./DirectoryTree"
+import { captureOutput } from "./capture-util"
 
 class TestHelper {
   private static TEMPLATE_DIR = path.join(__dirname, "..", "_template")
@@ -13,8 +14,8 @@ class TestHelper {
   readonly cwd: string
 
   program: Command
-  out: string[] = []
-  err: string[] = []
+  out: string = ""
+  err: string = ""
   exitError: CommanderError | null = null
   lastError: Error | null = null
   lastArgs: string[]
@@ -42,11 +43,6 @@ class TestHelper {
       this.exitError = err
       throw err
     })
-
-    this.program.configureOutput({
-      writeOut: (str: string) => this.out.push(str),
-      writeErr: (str: string) => this.err.push(str)
-    })
   }
 
   /**
@@ -72,8 +68,8 @@ class TestHelper {
     }
 
     this.lastArgs = []
-    this.out = []
-    this.err = []
+    this.out = ""
+    this.err = ""
     this.exitError = null
   }
 
@@ -92,21 +88,29 @@ class TestHelper {
   }
 
   async run(...args: string[]) {
+    const capture = captureOutput()
+
+    if (args[0] != "node") {
+      args = ["node"].concat(args)
+    }
+
+    if (args.length > 1 && !["hog", "trufflehog-for-npm"].includes(args[1])) {
+      args = ["node", "hog"].concat(args.slice(1))
+    }
+
+    this.lastArgs = args
+    capture.start()
+
     try {
-      if (args[0] != "node") {
-        args = ["node"].concat(args)
-      }
-
-      if (args.length > 1 && !["hog", "trufflehog-for-npm"].includes(args[1])) {
-        args = ["node", "hog"].concat(args.slice(1))
-      }
-
-      this.lastArgs = args
       await this.program.parseAsync(args)
       await this.wait(1)
     } catch (ex) {
       this.lastError = ex
       return this.exitError?.exitCode || -1
+    } finally {
+      const { stderr, stdout } = capture.stop()
+      this.err = this.err.concat(stderr)
+      this.out = this.out.concat(stdout)
     }
 
     return 0
@@ -120,10 +124,10 @@ class TestHelper {
     console.log(this.lastError)
 
     console.log("--ERROR:")
-    console.log(this.err.join())
+    console.log(this.err)
 
     console.log("--OUT:")
-    console.log(this.out.join())
+    console.log(this.out)
 
     console.log("--ARGS:", this.lastArgs)
     console.log()

@@ -11,17 +11,13 @@ describe(basename(__filename), function () {
 
   it("should show a help", async () => {
     await helper.run("--help")
-    expect(
-      helper.out.some(x =>
-        x.includes(
-          "Let's use trufflehog to scan you NPM package before it is published."
-        )
-      )
-    ).to.be.true
+    expect(helper.out).to.include(
+      "Let's use trufflehog to scan you NPM package before it is published."
+    )
   })
 
   it("should show a version", async () => {
     await helper.run("--version")
-    expect(helper.out.join().trim()).to.match(/^\d\.\d\.\d$/)
+    expect(helper.out.trim()).to.match(/^\d\.\d\.\d$/)
   })
 })

@@ -11,12 +11,14 @@ describe(basename(__filename), function () {
 
   it("should return non 0 exit code when secret is found in package", async () => {
     helper.writeLinesToFile("secret.sauce", "BOT_TOKEN=" + helper.fakeASecret())
-    let exitCode = await helper.run("scan", "-d", "./unpacked", "-s")
+    let exitCode = await helper.run("scan", "-d", "./unpacked")
+    expect(helper.out).to.include("Secrets found")
     expect(exitCode).not.to.eql(0)
   })
 
   it("should return 0 exit code when no secret is found in package", async () => {
-    let exitCode = await helper.run("scan", "-d", "./unpacked", "-s")
+    let exitCode = await helper.run("scan", "-d", "./unpacked")
+    expect(helper.out).to.include("No secrets found")
     expect(exitCode).to.eql(0)
   })
 })
