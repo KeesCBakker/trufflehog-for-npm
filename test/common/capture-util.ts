@@ -21,7 +21,10 @@ export function captureOutput(): {
     stop: () => {
       process.stdout.write = originalStdoutWrite
       process.stderr.write = originalStderrWrite
-      return { stdout: capturedStdout.join(), stderr: capturedStderr.join() }
+      return {
+        stdout: capturedStdout.join("\n"),
+        stderr: capturedStderr.join("\n")
+      }
     }
   }
 }

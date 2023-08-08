@@ -12,11 +12,15 @@ export async function echoTrufflehogVersion(silent: boolean = false) {
 
 export async function scanDirectoryWithTrufflehog(
   directory: string,
-  silent: boolean
+  silent: boolean,
+  extraArguments: string[] = []
 ) {
   // Escape backslashes in the directory string
   const escapedDirectory = directory.replace(/\\/g, "\\\\")
-  await executeTrufflehog(["filesystem", escapedDirectory, "--fail"], silent)
+  const theArguments = ["filesystem", escapedDirectory, "--fail"].concat(
+    extraArguments || []
+  )
+  await executeTrufflehog(theArguments, silent)
 }
 
 export async function scanPreCommitWithTrufflehog(silent: boolean = false) {

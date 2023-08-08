@@ -15,6 +15,8 @@ import { unpack } from "../tarring"
 export function addScanCommand(program: Command) {
   program
     .command("scan")
+    .option("--no-verification", "Don't verify the results.")
+    .option("--only-verified", "Only output verified results.")
     .addOption(new Option("-s, --silent", "generates no ouput").default(false))
     .addOption(
       new Option(
@@ -60,10 +62,19 @@ export function addScanCommand(program: Command) {
         await echoTrufflehogVersion()
       }
 
+      let extraArguments: string[] = []
+      if (options.noVerification) {
+        extraArguments.push("--no-verification")
+      }
+      if (options.onlyVerified) {
+        extraArguments.push("--only-verified")
+      }
+
       try {
         await scanDirectoryWithTrufflehog(
           unpackResult.directory,
-          options.silent
+          options.silent,
+          extraArguments
         )
         signalNoSecretsFound(options.silent)
       } catch (ex) {

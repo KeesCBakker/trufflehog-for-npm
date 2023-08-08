@@ -1,6 +1,6 @@
 import createProgram from "../../src/commands"
 import fs from "fs-extra"
-import path from "path"
+import path, { dirname } from "path"
 import { Command, CommanderError } from "commander"
 import { dir } from "tmp-promise"
 import { exec } from "child_process"
@@ -170,6 +170,9 @@ class TestHelper {
     ...lines: string[]
   ): Promise<void> {
     const filePath = path.join(this.getTempDirectory(), relativeFilePath)
+    const dir = dirname(filePath)
+    await fs.ensureDir(dir)
+
     const content = lines.join("\n") + "\n" // Convert lines to a single string and append newline at the end.
     await fs.appendFile(filePath, content) // Append content to the file.
   }
