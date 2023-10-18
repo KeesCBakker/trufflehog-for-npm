@@ -41,7 +41,7 @@
     "commander": "^11.0.0",
     "node-fetch": "^2.6.12",
     "prettier": "^3.0.1",
-    "rimraf": "^5.0.1",
+    "rimraf": "^5.0.4",
     "tar": "^6.1.15",
     "tmp-promise": "^3.0.3"
   },
