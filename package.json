@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/KeesCBakker/trufflehog-for-npm#readme",
   "dependencies": {
-    "@octokit/rest": "^20.0.1",
+    "@octokit/rest": "^20.0.2",
     "chalk": "^2.4.2",
     "command-exists": "^1.2.9",
     "commander": "^11.0.0",
